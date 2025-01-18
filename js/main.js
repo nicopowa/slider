@@ -81,7 +81,7 @@ const main = () => {
 		cl: color(1), 
 	});
 
-	slideIt("double range", {
+	slideIt("double range step 5", {
 		mn: 0,
 		mx: 100,
 		st: 5,
@@ -92,15 +92,15 @@ const main = () => {
 	slideIt("more ranges", {
 		mn: 0,
 		mx: 100,
-		st: 5,
+		st: 1,
 		nm: 6,
 		cl: color(3), 
 	});
 
-	slideIt("linked ranges", {
+	slideIt("linked ranges step 10", {
 		mn: 0,
-		mx: 100,
-		st: 5,
+		mx: 1000,
+		st: 10,
 		nm: 3,
 		cl: color(2), 
 	});
@@ -111,16 +111,7 @@ const main = () => {
 		st: 1,
 		nm: 1,
 		cl: color(1),
-		ft: (s) => {
-			return (
-				Math.floor(s / 60)
-				.toFixed(0)
-				.padStart(2, "0") +
-				":" +
-				(s % 60).toFixed(0)
-				.padStart(2, "0")
-			);
-		},
+		ft: (s) => `${s/3600>=1?`${~~(s/3600)}:`:''}${`0${~~(s/3600>=1?s%3600/60:s/60)}`.slice(-2)}:${`0${~~(s%60)}`.slice(-2)}`
 	});
 
 };
