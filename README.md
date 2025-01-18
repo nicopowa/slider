@@ -1,10 +1,10 @@
 # slider
 
-Colorful mobile friendly smooth range sliders
+colorful mobile friendly smooth range sliders
 
 [DEMO](https://nicopowa.github.io/slider)
 
-Work in progress
+work in progress
 
 - easy to use
 - single value
@@ -13,4 +13,6 @@ Work in progress
 - multiple range
 - steps
 - events
-- bugs :)
+- 4.5k JS + 1k CSS
+
+compiled & minified with [ClosureCompiler](https://developers.google.com/closure/compiler) & [Sass](https://sass-lang.com/)

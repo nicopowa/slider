@@ -11,26 +11,22 @@
 		"options": {
 			"release": [
 				{
+					"externs": "js/slider.compile.js"
+				},
+				{
 					"language_out": "ECMASCRIPT_NEXT"
 				}
 			],
-			"debug": []
-		}
-	},
-	"package": {
-		"files": [
-			"js/slider.js",
-			"js/main.js"
-		],
-		"styles": [
-			"css/slider.css",
-			"css/main.css"
-		],
-		"merge": [],
-		"externs": [],
-		"options": {
-			"release": [],
-			"debug": []
-		}
+			"debug": [
+				{
+					"externs": "js/slider.compile.js"
+				},
+				{
+					"language_out": "ECMASCRIPT_NEXT"
+				}
+			]
+		},
+		"version": 1,
+		"compiled": "18/01/2025 12:39:15"
 	}
 }

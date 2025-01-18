@@ -73,7 +73,7 @@ const main = () => {
 		cl: color(3), 
 	});
 
-	slideIt("single range", {
+	slideIt("range", {
 		mn: 0,
 		mx: 100,
 		st: 1,
@@ -81,7 +81,7 @@ const main = () => {
 		cl: color(1), 
 	});
 
-	slideIt("double range step 5", {
+	slideIt("2x range step", {
 		mn: 0,
 		mx: 100,
 		st: 5,
@@ -89,7 +89,7 @@ const main = () => {
 		cl: color(2), 
 	});
 
-	slideIt("more ranges", {
+	slideIt("3x range", {
 		mn: 0,
 		mx: 100,
 		st: 1,
@@ -97,7 +97,7 @@ const main = () => {
 		cl: color(3), 
 	});
 
-	slideIt("linked ranges step 10", {
+	slideIt("linked ranges", {
 		mn: 0,
 		mx: 1000,
 		st: 10,
