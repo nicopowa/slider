@@ -1,0 +1,36 @@
+{
+	"standalone": {
+		"files": [
+			"js/slider.js"
+		],
+		"styles": [
+			"css/slider.css"
+		],
+		"merge": [],
+		"externs": [],
+		"options": {
+			"release": [
+				{
+					"language_out": "ECMASCRIPT_NEXT"
+				}
+			],
+			"debug": []
+		}
+	},
+	"package": {
+		"files": [
+			"js/slider.js",
+			"js/main.js"
+		],
+		"styles": [
+			"css/slider.css",
+			"css/main.css"
+		],
+		"merge": [],
+		"externs": [],
+		"options": {
+			"release": [],
+			"debug": []
+		}
+	}
+}
