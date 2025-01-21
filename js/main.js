@@ -40,11 +40,11 @@ const main = () => {
 	const slideWhat = (opts, wraps) => 
 		new Slider(divIt(wraps), opts);
 
-	const palette = ["ff595e","ffca3a","8ac926","1982c4","6a4c93"];
+	const palette = ["ff595e","ff924c","ffca3a","c5ca30","8ac926","52a675","1982c4","4267ac","6a4c93"];
 
 	const shuffle = arr => arr.sort(() => Math.random() - 0.5);
 
-	const color = num => 
+	const color = (num = 1) => 
 		shuffle(palette).slice(0, num).map(col => "#" + col);
 
 	const heads = divIt(sliders, "heads");
@@ -58,60 +58,44 @@ const main = () => {
 	heads.appendChild(repo);
 
 	slideIt("single value", {
-		mn: 0,
-		mx: 10,
-		st: 1,
-		nm: 1,
-		cl: color(1),
+		max: 10,
+		col: color(),
 	});
 
 	slideIt("multiple values", {
-		mn: 0,
-		mx: 100,
-		st: 1,
-		nm: 3,
-		cl: color(3), 
+		val: [8, 16, 32, 64],
+		col: color(4), 
 	});
 
-	slideIt("range", {
-		mn: 0,
-		mx: 100,
-		st: 1,
-		nm: 2,
-		cl: color(1), 
+	slideIt("range + step", {
+		stp: 5,
+		num: 2,
+		col: color(), 
 	});
 
-	slideIt("2x range step", {
-		mn: 0,
-		mx: 100,
-		st: 5,
-		nm: 4,
-		cl: color(2), 
+	slideIt("min range 10", {
+		num: 2,
+		rng: 10, 
+		col: color(), 
 	});
 
 	slideIt("3x range", {
-		mn: 0,
-		mx: 100,
-		st: 1,
-		nm: 6,
-		cl: color(3), 
+		val: [5, 10, 20, 35, 50, 80],
+		col: color(3), 
 	});
 
 	slideIt("linked ranges", {
-		mn: 0,
-		mx: 1000,
-		st: 10,
-		nm: 3,
-		cl: color(2), 
+		max: 1000,
+		stp: 10,
+		val: [100, 500, 700],
+		col: color(2), 
 	});
 
 	slideIt("time format", {
-		mn: 0,
-		mx: 300,
-		st: 1,
-		nm: 1,
-		cl: color(1),
-		ft: (s) => `${s/3600>=1?`${~~(s/3600)}:`:''}${`0${~~(s/3600>=1?s%3600/60:s/60)}`.slice(-2)}:${`0${~~(s%60)}`.slice(-2)}`
+		max: 300,
+		col: color(),
+		val: 60, 
+		fmt: (s) => `${s/3600>=1?`${~~(s/3600)}:`:''}${`0${~~(s/3600>=1?s%3600/60:s/60)}`.slice(-2)}:${`0${~~(s%60)}`.slice(-2)}`
 	});
 
 };

@@ -4,15 +4,26 @@ colorful mobile friendly smooth range sliders
 
 [DEMO](https://nicopowa.github.io/slider)
 
-work in progress
+## features
 
-- easy to use
+- touch friendly
 - single value
 - multiple values
 - range
-- multiple range
-- steps
+- multiple ranges
+- linked ranges
 - events
-- 4.5k JS + 1k CSS
+- 5.3k JS + 1k CSS
+
+## options
+
+- min : minimum value
+- max : maximum value
+- stp : step value
+- rng : min range size
+- num : number of values
+- col : color palette
+- val : initial values
+- fmt : format function
 
 compiled & minified with [ClosureCompiler](https://developers.google.com/closure/compiler) & [Sass](https://sass-lang.com/)

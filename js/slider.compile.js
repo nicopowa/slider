@@ -1,13 +1,14 @@
 /** 
  * @typedef
  * {{
- * 	mn: (Number|undefined), 
- *  mx: (Number|undefined), 
- * 	st: (Number|undefined), 
- * 	nm: (Number|undefined), 
- * 	cl: (string|undefined), 
- * 	ft: (Function|undefined), 
- * 	vl: (Number|Array|null|undefined), 
+ * 	min: (Number|undefined), 
+ *  max: (Number|undefined), 
+ * 	stp: (Number|undefined), 
+ * 	rng: (Number|undefined), 
+ * 	num: (Number|undefined), 
+ * 	col: (string|Array|undefined), 
+ * 	fmt: (Function|undefined), 
+ * 	val: (Number|Array|null|undefined), 
  * }}
  */
 let SliderOptions;

@@ -52,6 +52,8 @@ body {
 	display: flex;
 	justify-content: space-between;
 	border-bottom: solid 1px #888888;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 .heads a {
@@ -66,7 +68,7 @@ hr {
 .wraps {
 	display: flex;
 	flex-direction: column;
-	gap: 13px;
+	gap: 14px;
 }
 
 .slides {
@@ -77,10 +79,14 @@ hr {
 	font-size: 14px;
 }
 
+.slides div {
+	transition: color 0.3s ease;
+}
+
 .slider {
 	width: 100%;
 }
 
 .live {
-	color: #006aff;
+	color: #ffbb00;
 }
