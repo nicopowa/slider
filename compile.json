@@ -26,8 +26,8 @@
 				}
 			]
 		},
-		"version": 24,
-		"compiled": "24/01/2025 21:29:57"
+		"version": 26,
+		"compiled": "25/01/2025 00:27:24"
 	},
 	"package": {
 		"files": [
@@ -61,7 +61,7 @@
 		"flags": {
 			"obfuscate": true
 		},
-		"version": 24,
-		"compiled": "24/01/2025 21:30:06"
+		"version": 26,
+		"compiled": "25/01/2025 00:27:29"
 	}
 }
