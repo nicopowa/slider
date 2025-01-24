@@ -44,6 +44,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	padding-bottom: 2em;
 }
 
 .heads {

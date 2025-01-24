@@ -22,6 +22,7 @@ const main = () => {
 
 		const wraps = divIt(sliders, "wraps");
 		const [what, vals] = slideHead(name, wraps);
+
 		const slide = slideWhat(opts, wraps);
 
 		const disp = (dat) =>
@@ -98,6 +99,7 @@ const main = () => {
 	heads.appendChild(repo);
 
 	slideIt("single value", {
+		val: 5, 
 		max: 10,
 		col: color(),
 	});
@@ -109,12 +111,12 @@ const main = () => {
 
 	slideIt("range + step", {
 		stp: 5,
-		num: 2,
+		val: [25, 75],
 		col: color(),
 	});
 
 	slideIt("min range 10", {
-		num: 2,
+		val: [35, 65],
 		rng: 10,
 		col: color(),
 	});
@@ -125,16 +127,16 @@ const main = () => {
 	});
 
 	slideIt("linked range", {
-		max: 1000,
-		stp: 10,
-		val: [100, 500, 700],
+		max: 100,
+		stp: 1,
+		val: [10, 50, 70],
 		col: color(2),
 	});
 
 	slideIt("linked ranges", {
-		max: 1000,
-		stp: 10,
-		val: [100, 200, 500, 700],
+		max: 100,
+		stp: 1,
+		val: [10, 20, 50, 70],
 		col: color(3),
 	});
 

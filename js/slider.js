@@ -180,21 +180,17 @@ class Slider {
 	 * @type {number|Array} values : slider values
 	 */
 	set values(v) {
-
-		const newVals = Array.isArray(v)
-			? Array.isArray(v[0])
-				? v.flat()
-				: v
-			: [v];
-
-		if(newVals.length !== this._num)
+		const newVals = [v].flat().map(val => 
+			Array.isArray(val) ? val : [val]
+		).flat();
+	
+		if(newVals.length !== this._num) {
 			throw new Error(this._num + " values expected");
-
-		this._vals = newVals.map((v) =>
-			this._forceRange(+v));
+		}
+	
+		this._vals = newVals.map(v => this._forceRange(+v));
 		this._targetVals = [...this._vals];
 		this._updateUI();
-	
 	}
 
 	_calculateLabelPositions(pos) {
