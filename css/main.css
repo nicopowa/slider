@@ -31,7 +31,7 @@ body {
 
 	body {
 
-		background-color: #202020;
+		background-color: #1a1a1a;
 		color: #888888;
 
 	}
@@ -68,7 +68,7 @@ hr {
 .wraps {
 	display: flex;
 	flex-direction: column;
-	gap: 14px;
+	gap: 4px;
 }
 
 .slides {
@@ -79,8 +79,8 @@ hr {
 	font-size: 14px;
 }
 
-.slides div {
-	transition: color 0.3s ease;
+.slides div:first {
+	transition: color 0.2s ease;
 }
 
 .slider {
@@ -88,5 +88,5 @@ hr {
 }
 
 .live {
-	color: #ffbb00;
+	font-weight: bold;
 }

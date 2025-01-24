@@ -26,7 +26,42 @@
 				}
 			]
 		},
-		"version": 16,
-		"compiled": "21/01/2025 23:05:03"
+		"version": 24,
+		"compiled": "24/01/2025 21:29:57"
+	},
+	"package": {
+		"files": [
+			"js/slider.js",
+			"js/main.js"
+		],
+		"styles": [
+			"css/slider.css",
+			"css/main.css"
+		],
+		"merge": [],
+		"externs": [],
+		"options": {
+			"release": [
+				{
+					"externs": "js/slider.compile.js"
+				},
+				{
+					"language_out": "ECMASCRIPT_NEXT"
+				}
+			],
+			"debug": [
+				{
+					"externs": "js/slider.compile.js"
+				},
+				{
+					"language_out": "ECMASCRIPT_NEXT"
+				}
+			]
+		},
+		"flags": {
+			"obfuscate": true
+		},
+		"version": 24,
+		"compiled": "24/01/2025 21:30:06"
 	}
 }

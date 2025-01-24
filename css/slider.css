@@ -13,6 +13,7 @@
 	}
 }
 
+/* slider wrap */
 .slider {
 	position: relative;
 	touch-action: none;
@@ -25,6 +26,7 @@
 	-webkit-user-select: none;
 }
 
+/* slide zone */
 .slider .rail {
 	display: flex;
 	flex-direction: column;
@@ -33,18 +35,25 @@
 	cursor: pointer;
 }
 
+/*  */
 .slider .line {
 	position: absolute;
 	left: 0;
 	right: 0;
 	height: var(--railHeight);
 	background: var(--railColor);
+	/* transition: transform 0.2s ease; */
+}
+
+/* focus scale animation */
+.slider.sliding .line {
+	/* transform: scaleY(1.4); */
 }
 
 .slider .range {
 	position: absolute;
 	height: 100%;
-	will-change: left, width, z-index;
+	will-change: left, width;
 }
 
 .slider .lbls {

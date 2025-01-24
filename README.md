@@ -6,14 +6,20 @@ colorful mobile friendly smooth range sliders
 
 ## features
 
-- touch friendly
+- mobile friendly
 - single value
 - multiple values
-- range
+- single range
 - multiple ranges
-- linked ranges
-- events
-- 5.3k JS + 1k CSS
+- linked range
+- events triggers
+
+## values / ranges
+
+- slider mode is automatic
+- number of values == number of colors = value slider
+- number of values == 2x number of colors = range slider
+
 
 ## options
 
@@ -26,4 +32,14 @@ colorful mobile friendly smooth range sliders
 - val : initial values
 - fmt : format function
 
-compiled & minified with [ClosureCompiler](https://developers.google.com/closure/compiler) & [Sass](https://sass-lang.com/)
+## events
+
+- start : start sliding
+- slide : during slide
+- change : after slide
+
+## dev
+
+- no dependencies
+- 5.6k JS + 1k CSS
+- compiled & minified with [closure compiler](https://developers.google.com/closure/compiler) & [sass](https://sass-lang.com/)
