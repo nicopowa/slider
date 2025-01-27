@@ -12,23 +12,29 @@ class Slider {
 	 */
 	constructor(container, opts = {}) {
 
+		this.dec = String(opts.stp || "")
+		.includes(".")
+			? String(opts.stp)
+			.split(".")[1].length
+			: 0;
+
 		const def = {
 			min: 0,
 			max: 100,
 			stp: 1,
 			num: 1,
 			col: "#4A90E2",
-			fmt: (v) =>
-				v.toFixed(0),
+			fmt: v =>
+				v.toFixed(this.dec),
 			val: null,
 			rng: 0,
 		};
 
 		opts = { ...def, ...opts };
 
-		this.rail
-			= this.track
-			= this.intervals
+		this.track
+			= this.ranges
+			= this.valueBox
 			= this.labelBox
 			= this.minLabel
 			= this.maxLabel
@@ -74,52 +80,64 @@ class Slider {
 
 	_createElements() {
 
-		const c = (cls) =>
+		const c = cls =>
 			Object.assign(document.createElement("div"), { className: cls });
 
-		[this.rail, this.track, this.labelBox] = ["rail", "line", "lbls"].map(
-			c
-		);
-		this.intervals = Array(Math.max(this._num, this._colors.length))
+		[this.track, this.valueBox, this.labelBox, this.minLabel, this.maxLabel] = [
+			"track",
+			"vals",
+			"lbls", 
+			"", 
+			""
+		].map(c);
+
+		this.ranges = Array(Math.max(this._num, this._colors.length))
 		.fill(0)
 		.map(() =>
 			c("range"));
+
 		this.valueLabels = Array(this._num)
 		.fill(0)
 		.map(() =>
 			c("val"));
-		[this.minLabel, this.maxLabel] = ["lbl mn", "lbl mx"].map(c);
 
-		this.track.append(...this.intervals);
-		this.rail.append(this.track);
-		this.labelBox.append(this.minLabel, ...this.valueLabels, this.maxLabel);
-		this.wrap.append(this.rail, this.labelBox);
+		this.valueBox.append(...this.valueLabels);
+		this.wrap.append(this.valueBox);
+
+		this.track.append(...this.ranges);
+		this.wrap.append(this.track);
+
+		this.labelBox.append(this.minLabel, this.maxLabel);
+		this.wrap.append(this.labelBox);
+
+		this.minLabel.innerText = this._disp(this._min);
+		this.maxLabel.innerText = this._disp(this._max);
 	
 	}
 
 	_setupEvents() {
 
-		const move = (e) =>
+		const move = e =>
 				this._activeIdx !== -1 && this._onMove(e),
-			up = (e) =>
+			up = e =>
 				this._activeIdx !== -1 && this._onUp(e);
 
-		this.rail.addEventListener("pointerdown", (e) =>
+		this.wrap.addEventListener("pointerdown", e =>
 			this._onDown(e));
-		["pointermove", "pointerup", "pointercancel"].forEach((evt) =>
-			this.rail.addEventListener(evt, evt === "pointermove" ? move : up)
+		["pointermove", "pointerup", "pointercancel"].forEach(evt =>
+			this.wrap.addEventListener(evt, evt === "pointermove" ? move : up)
 		);
 	
 	}
 
 	_defaultValues(n) {
 
-		const step = this._range / (n + 1);
+		const stp = this._range / (n + 1);
 
 		return Array(n)
 		.fill(0)
 		.map((_, i) =>
-			this._roundToStep(this._min + step * (i + 1)));
+			this._roundToStep(this._min + stp * (i + 1)));
 	
 	}
 
@@ -130,7 +148,7 @@ class Slider {
 	 */
 	get values() {
 
-		const vals = this._vals.map((v) =>
+		const vals = this._vals.map(v =>
 			this._roundToStep(v));
 
 		if(this._num === 1)
@@ -180,22 +198,29 @@ class Slider {
 	 * @type {number|Array} values : slider values
 	 */
 	set values(v) {
-		const newVals = [v].flat().map(val => 
-			Array.isArray(val) ? val : [val]
-		).flat();
-	
+
+		const newVals = [v]
+		.flat()
+		.map(val =>
+			(Array.isArray(val) ? val : [val]))
+		.flat();
+
 		if(newVals.length !== this._num) {
+
 			throw new Error(this._num + " values expected");
+		
 		}
-	
-		this._vals = newVals.map(v => this._forceRange(+v));
+
+		this._vals = newVals.map(v =>
+			this._forceRange(+v));
 		this._targetVals = [...this._vals];
 		this._updateUI();
+	
 	}
 
 	_calculateLabelPositions(pos) {
 
-		const rWidth = this.rail.offsetWidth,
+		const rWidth = this.wrap.offsetWidth,
 			minGap = 4;
 		const labels = pos
 		.map((p, i) =>
@@ -220,7 +245,7 @@ class Slider {
 
 			labels
 			.filter(
-				(o) =>
+				o =>
 					o !== l
 						&& Math.abs(o.origPx - l.origPx) < l.fullWidth + minGap
 			)
@@ -234,14 +259,14 @@ class Slider {
 		};
 
 		labels
-		.filter((l) =>
+		.filter(l =>
 			l.origPx < l.halfWidth)
-		.forEach((l) =>
+		.forEach(l =>
 			processEdge(l, true));
 		labels
-		.filter((l) =>
+		.filter(l =>
 			l.origPx > rWidth - l.halfWidth)
-		.forEach((l) =>
+		.forEach(l =>
 			processEdge(l, false));
 
 		for(let iter = 0, hasOverlap = true; hasOverlap && iter < 50; iter++) {
@@ -277,22 +302,23 @@ class Slider {
 	_updateUI() {
 
 		const pos = this._vals.map(
-				(v) =>
+				v =>
 					((v - this._min) / this._range) * 100
 			),
+			cLen = this._colors.length, 
 			sorted = this._vals
 			.map((v, i) =>
 				({ v, i }))
 			.sort((a, b) =>
 				b.v - a.v)
-			.map((x) =>
+			.map(x =>
 				x.i);
 
-		if(this._colors.length >= this._num) {
+		if(cLen >= this._num) {
 
 			pos.forEach((p, i) =>
 				this._updateLine(
-					this.intervals[i],
+					this.ranges[i],
 					0,
 					p,
 					this._colors[i],
@@ -301,7 +327,7 @@ class Slider {
 			);
 		
 		}
-		else if(this._colors.length === this._num - 1) {
+		else if(cLen === this._num - 1) {
 
 			const sVals = [...this._vals].sort((a, b) =>
 				a - b);
@@ -314,7 +340,7 @@ class Slider {
 				];
 
 				this._updateLine(
-					this.intervals[i],
+					this.ranges[i],
 					p1,
 					p2 - p1,
 					this._colors[i],
@@ -332,10 +358,10 @@ class Slider {
 					[l, r] = p1 < p2 ? [p1, p2] : [p2, p1];
 
 				this._updateLine(
-					this.intervals[i / 2],
+					this.ranges[i / 2],
 					l,
 					r - l,
-					this._colors[(i / 2) % this._colors.length],
+					this._colors[(i / 2) % cLen],
 					i / 2 + 1
 				);
 			
@@ -355,7 +381,7 @@ class Slider {
 				const [p1, p2] = [pos[sVals[i].i], pos[sVals[i + 1].i]];
 
 				this._updateLine(
-					this.intervals[i],
+					this.ranges[i],
 					Math.min(p1, p2),
 					Math.abs(p2 - p1),
 					this._colors[i],
@@ -372,27 +398,27 @@ class Slider {
 
 			let cIdx;
 
-			if(this._colors.length >= this._num) {
+			if(cLen >= this._num) {
 
 				cIdx = i;
 			
 			}
-			else if(this._colors.length === this._num - 1) {
+			else if(cLen === this._num - 1) {
 
 				const sorted = [...this._vals]
 				.map((v, idx) =>
 					({ v, idx }))
 				.sort((a, b) =>
 					a.v - b.v);
-				const myPos = sorted.findIndex((x) =>
+				const myPos = sorted.findIndex(x =>
 					x.idx === i);
 
-				cIdx = Math.min(myPos, this._colors.length - 1);
+				cIdx = Math.min(myPos, cLen - 1);
 			
 			}
 			else if(this._num % 2 === 0) {
 
-				cIdx = Math.floor(i / 2) % this._colors.length;
+				cIdx = Math.floor(i / 2) % cLen;
 			
 			}
 			else {
@@ -404,46 +430,40 @@ class Slider {
 
 				cIdx = Math.min(
 					sortedVals.indexOf(val),
-					this._colors.length - 1
+					cLen - 1
 				);
 			
 			}
 
 			const label = this.valueLabels[i];
 
-			label.innerText = this._disp(val);
+			label.innerText = this._disp(this._roundToStep(val));
+
 			this._updateLabel(
 				label,
 				adjPos[i],
-				this._colors[cIdx],
-				sorted.indexOf(i) + this._num + 1
+				this._colors[cIdx]
 			);
 		
 		});
-
-		[this.minLabel.innerText, this.maxLabel.innerText] = [
-			this._min,
-			this._max,
-		].map((v) =>
-			this._disp(v));
 	
 	}
 
-	_updateLine(el, left, width, color, z) {
+	_updateLine(el, lft, wth, col, zdx) {
 
 		Object.assign(el.style, {
-			left: left + "%",
-			width: width + "%",
-			backgroundColor: color,
-			zIndex: z,
+			left: lft + "%",
+			width: wth + "%",
+			backgroundColor: col,
+			zIndex: zdx,
 		});
 	
 	}
 
-	_updateLabel(el, left, color, z) {
+	_updateLabel(el, lft, col) {
 
-		const [rW, lW] = [this.rail.offsetWidth, el.offsetWidth],
-			pxPos = (left / 100) * rW,
+		const [rW, lW] = [this.wrap.offsetWidth, el.offsetWidth],
+			pxPos = (lft / 100) * rW,
 			edge = lW / 2;
 		let tX = -50;
 
@@ -453,9 +473,8 @@ class Slider {
 			tX = -100 + ((rW - pxPos) / edge) * 50;
 
 		Object.assign(el.style, {
-			left: left + "%",
-			color,
-			zIndex: z,
+			left: lft + "%",
+			color: col,
 			transform: `translateX(${tX}%)`,
 		});
 	
@@ -463,7 +482,12 @@ class Slider {
 
 	_roundToStep(v) {
 
-		return this._forceRange(this._step * Math.round(v / this._step));
+		return this._forceRange(+parseFloat(this._step 
+		* Math
+		.round(
+			v 
+			/ this._step
+		)).toFixed(this.dec));
 	
 	}
 
@@ -475,7 +499,7 @@ class Slider {
 
 	_onDown(e) {
 
-		const rect = this.rail.getBoundingClientRect(),
+		const rect = this.wrap.getBoundingClientRect(),
 			pos = (e.clientX - rect.left) / rect.width,
 			val = this._min + pos * this._range;
 
@@ -488,13 +512,14 @@ class Slider {
 		);
 		[this._startVal, this._startPos] = [this._vals[this._activeIdx], pos];
 		this._isMoving = false;
-		this.rail.setPointerCapture(e.pointerId);
+		this._slideState(true);
+		this.wrap.setPointerCapture(e.pointerId);
 	
 	}
 
 	_onMove(e) {
 
-		const rect = this.rail.getBoundingClientRect(),
+		const rect = this.wrap.getBoundingClientRect(),
 			pos = (e.clientX - rect.left) / rect.width,
 			delta = pos - this._startPos;
 		let newVal = this._roundToStep(this._startVal + delta * this._range);
@@ -534,8 +559,6 @@ class Slider {
 		if(!this._isMoving && newVal !== this._targetVals[this._activeIdx]) {
 
 			this._isMoving = true;
-			// focus scale animation
-			// this.wrap.classList.add("sliding");
 			this._dispatch("start");
 		
 		}
@@ -547,8 +570,9 @@ class Slider {
 
 	_onUp(e) {
 
-		this.rail.releasePointerCapture(e.pointerId);
+		this.wrap.releasePointerCapture(e.pointerId);
 		[this._activeIdx, this._isMoving] = [-1, false];
+		this._slideState(false);
 	
 	}
 
@@ -561,6 +585,7 @@ class Slider {
 
 			let [needsUpdate, valueChanged] = [false, false];
 			const EASE = 0.2;
+			const PRECISION = this._step / 10;
 
 			this._vals.forEach((val, i) => {
 
@@ -570,7 +595,7 @@ class Slider {
 
 					const delta = target - val;
 
-					if(Math.abs(delta) < 0.01) {
+					if(Math.abs(delta) < PRECISION) {
 
 						this._vals[i] = target;
 						valueChanged = true;
@@ -600,8 +625,6 @@ class Slider {
 
 					this._frameLoop = null;
 					this._dispatch("change");
-					// focus scale animation
-					// this.wrap.classList.remove("sliding");
 					this._isMoving = false;
 				
 				}
@@ -613,6 +636,12 @@ class Slider {
 		};
 
 		this._frameLoop = requestAnimationFrame(step);
+	
+	}
+
+	_slideState(stt) {
+
+		this.wrap.classList.toggle("sliding", stt);
 	
 	}
 
@@ -653,6 +682,7 @@ class Slider {
 	destroy() {
 
 		this._frameLoop && cancelAnimationFrame(this._frameLoop);
+		// off listeners
 		this.wrap.remove();
 	
 	}

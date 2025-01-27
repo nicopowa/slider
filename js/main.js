@@ -25,7 +25,7 @@ const main = () => {
 
 		const slide = slideWhat(opts, wraps);
 
-		const disp = (dat) =>
+		const disp = dat =>
 			(vals.innerHTML = [dat]
 			.flat(1)
 			.map(
@@ -36,9 +36,9 @@ const main = () => {
 
 		slide.on("start", () =>
 			what.classList.add("live"));
-		slide.on("slide", (evt) =>
+		slide.on("slide", evt =>
 			disp(evt.detail));
-		slide.on("change", (evt) => {
+		slide.on("change", evt => {
 
 			what.classList.remove("live");
 			disp(evt.detail);
@@ -76,14 +76,14 @@ const main = () => {
 		"6a4c93",
 	];
 
-	const shuffle = (arr) =>
+	const shuffle = arr =>
 		arr.sort(() =>
 			Math.random() - 0.5);
 
 	const color = (num = 1) =>
 		shuffle(palette)
 		.slice(0, num)
-		.map((col) =>
+		.map(col =>
 			"#" + col);
 
 	const heads = divIt(sliders, "heads");
@@ -98,57 +98,63 @@ const main = () => {
 	repo.href = "https://github.com/nicopowa/slider";
 	heads.appendChild(repo);
 
-	slideIt("single value", {
-		val: 5, 
-		max: 10,
-		col: color(),
-	});
+	const slideTests = {
+		"single value": {
+			val: 5,
+			max: 10,
+			col: color(),
+		},
+		"multiple values": {
+			val: [8, 16, 32, 64],
+			col: color(4),
+		},
+		"range + step": {
+			stp: 5,
+			val: [25, 75],
+			col: color(),
+		},
+		"min range 10": {
+			val: [35, 65],
+			rng: 10,
+			col: color(),
+		},
+		"3x range": {
+			val: [5, 10, 20, 35, 50, 80],
+			col: color(3),
+		},
+		"linked range": {
+			max: 100,
+			stp: 1,
+			val: [10, 50, 70],
+			col: color(2),
+		},
+		"linked ranges": {
+			max: 100,
+			stp: 1,
+			val: [10, 20, 50, 70],
+			col: color(3),
+		},
+		"time format": {
+			max: 5400,
+			col: color(),
+			val: 3600,
+			fmt: s =>
+				(s < 3600 ? [60, 1] : [3600, 60, 1])
+				.map(x =>
+					`0${~~(s / x) % 60}`.slice(-2))
+				.join(":"),
+		},
+		"float values": {
+			min: 0,
+			max: 0.1,
+			stp: 0.001,
+			val: [0.016, 0.032, 0.064],
+			col: color(3),
+		},
+	};
 
-	slideIt("multiple values", {
-		val: [8, 16, 32, 64],
-		col: color(4),
-	});
-
-	slideIt("range + step", {
-		stp: 5,
-		val: [25, 75],
-		col: color(),
-	});
-
-	slideIt("min range 10", {
-		val: [35, 65],
-		rng: 10,
-		col: color(),
-	});
-
-	slideIt("3x range", {
-		val: [5, 10, 20, 35, 50, 80],
-		col: color(3),
-	});
-
-	slideIt("linked range", {
-		max: 100,
-		stp: 1,
-		val: [10, 50, 70],
-		col: color(2),
-	});
-
-	slideIt("linked ranges", {
-		max: 100,
-		stp: 1,
-		val: [10, 20, 50, 70],
-		col: color(3),
-	});
-
-	slideIt("time format", {
-		max: 5400,
-		col: color(),
-		val: 3600,
-		fmt: (s) =>
-			(s < 3600 ? [60, 1] : [3600, 60, 1])
-			.map((x) =>
-				`0${~~(s / x) % 60}`.slice(-2))
-			.join(":"),
-	});
+	Object.entries(slideTests)
+	.forEach(entry =>
+		slideIt(...entry));
 
 };
