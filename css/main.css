@@ -57,13 +57,14 @@ body {
 	-webkit-user-select: none;
 }
 
+.values, 
+.colors {
+	cursor: pointer;
+}
+
 .heads a {
 	text-decoration: none;
 	color: inherit;
-}
-
-hr {
-	width: 100%;
 }
 
 .wraps {

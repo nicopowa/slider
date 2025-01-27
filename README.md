@@ -1,46 +1,48 @@
-# slider
+# Slider
 
-colorful mobile friendly smooth range sliders
+Colorful mobile friendly smooth range sliders
 
 [DEMO](https://nicopowa.github.io/slider)
 
-## features
+## Features
 
-- mobile friendly
-- single value
-- multiple values
-- single range
-- multiple ranges
-- linked ranges
-- events triggers
+- Mobile friendly
+- Single value
+- Multiple values
+- Single range
+- Multiple ranges
+- Linked ranges
+- Events
 
-## values | ranges
-
-- slider mode is automatic
-- number of values == number of colors = value slider
-- number of values == 2x number of colors = range slider
-- number of values == number of colors - 1 = linked ranges slider
-
-## slide it
+## Slide it
 
 ```
 const someSlider = new Slider(container, options);
 ```
 
-## options
+See examples in main.js file.
+
+## Values | ranges
+
+- Slider mode is automatic
+- Number of values == number of colors = value slider
+- Number of values == 2x number of colors = range slider
+- Number of values == number of colors - 1 = linked ranges slider
+
+## Options
 
 - min : minimum value
 - max : maximum value
+- val : initial values
+- col : color palette
+- num : number of values (if val not defined)
 - stp : step value
 - rng : min range size
-- num : number of values
-- col : color palette
-- val : initial values
 - fmt : format function
 
-## events
+## Events
 
-class exposes "on" and "off" methods
+Use "on" and "off" methods :
 
 ```
 someSlider.on("slide", vals => console.log(vals));
@@ -50,9 +52,17 @@ someSlider.on("slide", vals => console.log(vals));
 - slide : ongoing slide
 - change : after slide
 
-## styling
+## Data
 
-in css file
+Values getter & dispatched events data structure depends on slider mode :
+
+- Single value : number
+- Multiple values : array of numbers
+- Range (single, multiple, linked) : array of ranges [min, max]
+
+## Styling
+
+Edit root section in CSS file :
 
 - slideHeight : slider height
 - trackHeight : slide track height
@@ -62,8 +72,16 @@ in css file
 - fontSize : labels font size
 - animate : sliding state animation
 
-## dev
+## Code
 
-- no dependencies
+- No dependencies
 - 6k JS + 2k CSS
-- compiled & minified with [closure compiler](https://developers.google.com/closure/compiler) & [sass](https://sass-lang.com/)
+- Compiled & minified with [closure compiler](https://developers.google.com/closure/compiler) & [sass](https://sass-lang.com/)
+
+## Next
+
+- Optimize animation loop
+- Minimize elements updates
+- Callbacks dispatcher
+- Keyboard controls
+- Accessibility

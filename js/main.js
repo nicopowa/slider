@@ -16,36 +16,17 @@ const main = () => {
 	
 	};
 
-	const sliders = divIt(document.body, "sliders");
+	const wrap = divIt(document.body, "sliders");
 
-	const slideIt = (name, opts) => {
+	const disp = (el, slider, dat) => {
 
-		const wraps = divIt(sliders, "wraps");
-		const [what, vals] = slideHead(name, wraps);
-
-		const slide = slideWhat(opts, wraps);
-
-		const disp = dat =>
-			(vals.innerHTML = [dat]
-			.flat(1)
-			.map(
-				(val, idx) =>
-					"<font color=\"" + opts.col[idx] + "\">" + val + "</font>"
-			)
-			.join("&nbsp;"));
-
-		slide.on("start", () =>
-			what.classList.add("live"));
-		slide.on("slide", evt =>
-			disp(evt.detail));
-		slide.on("change", evt => {
-
-			what.classList.remove("live");
-			disp(evt.detail);
-		
-		});
-
-		disp(slide.values);
+		el.innerHTML = [dat]
+		.flat(1)
+		.map(
+			(val, idx) =>
+				"<font color=\"" + slider.colors[idx] + "\">" + val + "</font>"
+		)
+		.join("&nbsp;");
 	
 	};
 
@@ -63,6 +44,36 @@ const main = () => {
 
 	const slideWhat = (opts, wraps) =>
 		new Slider(divIt(wraps), opts);
+
+	const slideIt = (name, opts) => {
+
+		const wraps = divIt(wrap, "wraps");
+		const [what, vals] = slideHead(name, wraps);
+
+		const slide = slideWhat(opts, wraps);
+
+		slide.on("start", evt => {
+
+			what.classList.add("live");
+			disp(vals, slide, evt.detail);
+		
+		});
+
+		slide.on("slide", evt =>
+			disp(vals, slide, evt.detail));
+
+		slide.on("change", evt => {
+
+			what.classList.remove("live");
+			disp(vals, slide, evt.detail);
+		
+		});
+
+		disp(vals, slide, slide.values);
+
+		return slide;
+	
+	};
 
 	const palette = [
 		"ff595e",
@@ -85,18 +96,6 @@ const main = () => {
 		.slice(0, num)
 		.map(col =>
 			"#" + col);
-
-	const heads = divIt(sliders, "heads");
-
-	const name = divIt(heads, "name");
-
-	name.innerHTML = "slider";
-
-	const repo = document.createElement("a");
-
-	repo.innerHTML = "repo";
-	repo.href = "https://github.com/nicopowa/slider";
-	heads.appendChild(repo);
 
 	const slideTests = {
 		"single value": {
@@ -153,8 +152,63 @@ const main = () => {
 		},
 	};
 
-	Object.entries(slideTests)
-	.forEach(entry =>
-		slideIt(...entry));
+	const heads = divIt(wrap, "heads");
+
+	const name = divIt(heads, "name");
+
+	name.innerHTML = "slider";
+
+	const resetValues = divIt(heads, "values");
+
+	resetValues.innerHTML = "values";
+
+	resetValues.addEventListener("click", () =>
+		Array.from(document.querySelectorAll(".slider"))
+		.forEach(
+			(slideEl, idx) => {
+
+				const heads = slideEl.previousSibling, 
+					slider = sliders[idx];
+
+				slider.values
+					= slideTests[heads.firstChild.innerText].val;
+
+				disp(heads.lastChild, slider, slider.values);
+
+			}
+		)
+	);
+
+	const newColors = divIt(heads, "colors");
+
+	newColors.innerHTML = "colors";
+
+	newColors.addEventListener("click", () =>
+		Array.from(document.querySelectorAll(".slider"))
+		.forEach(
+			(slideEl, idx) => {
+
+				const heads = slideEl.previousSibling, 
+					slider = sliders[idx];
+
+				slider.colors
+					= color(slider.colors.length);
+
+				disp(heads.lastChild, slider, slider.values);
+
+			}
+		)
+	);
+
+	const repo = document.createElement("a");
+
+	repo.innerHTML = "source";
+	repo.href = "https://github.com/nicopowa/slider";
+	heads.appendChild(repo);
+
+	const sliders = Object.entries(slideTests)
+	.map(entry =>
+		slideIt(...entry)
+	);
 
 };

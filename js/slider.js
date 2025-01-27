@@ -74,7 +74,7 @@ class Slider {
 		this._createElements();
 		this._setupEvents();
 		this.values = values;
-		this._dispatcher = new NativeEventTarget();
+		this._evts = new NativeEventTarget();
 	
 	}
 
@@ -83,13 +83,13 @@ class Slider {
 		const c = cls =>
 			Object.assign(document.createElement("div"), { className: cls });
 
-		[this.track, this.valueBox, this.labelBox, this.minLabel, this.maxLabel] = [
-			"track",
-			"vals",
-			"lbls", 
-			"", 
-			""
-		].map(c);
+		[
+			this.track,
+			this.valueBox,
+			this.labelBox,
+			this.minLabel,
+			this.maxLabel,
+		] = ["track", "vals", "lbls", "", ""].map(c);
 
 		this.ranges = Array(Math.max(this._num, this._colors.length))
 		.fill(0)
@@ -218,6 +218,29 @@ class Slider {
 	
 	}
 
+	/**
+	 * @export
+	 * @getter
+	 * @type {Array} colors : slider colors
+	 */
+	get colors() {
+
+		return this._colors;
+
+	}
+
+	/**
+	 * @setter
+	 * @type {Array} colors : slider colors
+	 */
+	set colors(c) {
+
+		this._colors = c;
+
+		this._updateUI();
+
+	}
+
 	_calculateLabelPositions(pos) {
 
 		const rWidth = this.wrap.offsetWidth,
@@ -305,7 +328,7 @@ class Slider {
 				v =>
 					((v - this._min) / this._range) * 100
 			),
-			cLen = this._colors.length, 
+			cLen = this._colors.length,
 			sorted = this._vals
 			.map((v, i) =>
 				({ v, i }))
@@ -428,10 +451,7 @@ class Slider {
 						a - b)),
 				];
 
-				cIdx = Math.min(
-					sortedVals.indexOf(val),
-					cLen - 1
-				);
+				cIdx = Math.min(sortedVals.indexOf(val), cLen - 1);
 			
 			}
 
@@ -439,11 +459,7 @@ class Slider {
 
 			label.innerText = this._disp(this._roundToStep(val));
 
-			this._updateLabel(
-				label,
-				adjPos[i],
-				this._colors[cIdx]
-			);
+			this._updateLabel(label, adjPos[i], this._colors[cIdx]);
 		
 		});
 	
@@ -482,12 +498,12 @@ class Slider {
 
 	_roundToStep(v) {
 
-		return this._forceRange(+parseFloat(this._step 
-		* Math
-		.round(
-			v 
-			/ this._step
-		)).toFixed(this.dec));
+		return this._forceRange(
+			+parseFloat(this._step * Math.round(v / this._step))
+			.toFixed(
+				this.dec
+			)
+		);
 	
 	}
 
@@ -654,7 +670,7 @@ class Slider {
 	 */
 	on(evt, handler) {
 
-		this._dispatcher.addEventListener(evt, handler);
+		this._evts.addEventListener(evt, handler);
 	
 	}
 
@@ -667,13 +683,13 @@ class Slider {
 	 */
 	off(evt, handler) {
 
-		this._dispatcher.removeEventListener(evt, handler);
+		this._evts.removeEventListener(evt, handler);
 	
 	}
 
 	_dispatch(type) {
 
-		this._dispatcher.dispatchEvent(
+		this._evts.dispatchEvent(
 			new CustomEvent(type, { detail: this.values })
 		);
 	
