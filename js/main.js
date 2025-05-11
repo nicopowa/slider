@@ -47,6 +47,8 @@ const main = () => {
 
 	const slideIt = (name, opts) => {
 
+		console.log(name, opts);
+
 		const wraps = divIt(wrap, "wraps");
 		const [what, vals] = slideHead(name, wraps);
 
@@ -84,7 +86,7 @@ const main = () => {
 		"52a675",
 		"1982c4",
 		"4267ac",
-		"6a4c93",
+		"6a4c93"
 	];
 
 	const shuffle = arr =>
@@ -99,8 +101,8 @@ const main = () => {
 
 	const slideTests = {
 		"single value": {
-			val: 5,
-			max: 10,
+			val: 50,
+			max: 100,
 			col: color(),
 		},
 		"multiple values": {
@@ -202,9 +204,15 @@ const main = () => {
 
 	const repo = document.createElement("a");
 
-	repo.innerHTML = "source";
+	repo.innerHTML = "repo";
 	repo.href = "https://github.com/nicopowa/slider";
 	heads.appendChild(repo);
+
+	const info = document.createElement("a");
+
+	info.innerHTML = "info";
+	info.href = "https://nicopr.fr/slider";
+	heads.appendChild(info);
 
 	const sliders = Object.entries(slideTests)
 	.map(entry =>

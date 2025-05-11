@@ -4,6 +4,8 @@ Colorful mobile friendly smooth range sliders
 
 [DEMO](https://nicopowa.github.io/slider)
 
+[INFO](https://nicopr.fr/slider)
+
 ## Features
 
 - Mobile friendly

@@ -30,9 +30,9 @@
 	position: relative;
 	touch-action: none;
 	height: var(--slideHeight);
-	font-size: var(--fontSize);
 	color: var(--textColor);
 	cursor: pointer;
+	/* outline: none; */
 }
 
 .slider div {
@@ -66,6 +66,8 @@
 	position: absolute;
 	top: 50%;
 	width: 100%;
+	font-size: var(--fontSize);
+	line-height: var(--fontSize);
 	transition: transform var(--animate);
 }
 
